@@ -54,25 +54,23 @@ app.post("/api/user/register", (req, res) => {
 
 // LOGIN → JWT 발급 포함
 app.post("/api/user/login", (req, res) => {
-  userService.checkUser(req.body)
+    userService.checkUser(req.body)
     .then((user) => {
-      const payload = {
-        _id: user._id,
-        userName: user.userName
-      };
+        // JWT 생성
+        const payload = {
+            _id: user._id,
+            userName: user.userName
+        };
 
-      // JWT 생성
-      const token = jwt.sign(payload, process.env.JWT_SECRET);
+        const token = jwt.sign(payload, process.env.JWT_SECRET);
 
-      res.json({
-        message: "login successful",
-        token: token
-      });
+        res.json({ message: "login successful", token: token });
     })
     .catch(msg => {
-      res.status(422).json({ message: msg });
+        res.status(422).json({ message: msg });
     });
 });
+
 
 // GET FAVOURITES (JWT 보호)
 app.get(
